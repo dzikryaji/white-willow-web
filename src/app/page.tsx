@@ -164,10 +164,10 @@ export default function HomePage() {
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
               <figure className="space-y-3">
                 <Image
-                  src="/images/alchemist-laboratory-wyck.jpg"
-                  alt="An alchemist laboratory scene representing potion preparation"
+                  src="/images/shop.png"
+                  alt="The interior of the White Willow herb shop"
                   width={1200}
-                  height={900}
+                  height={670}
                   className="h-auto w-full"
                   sizes="(min-width: 1024px) 50vw, 100vw"
                 />
