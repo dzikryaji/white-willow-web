@@ -3,12 +3,12 @@
 import { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useReducedMotion } from 'motion/react';
 
-export const FIRST_EMPTY_DARK_VH = 150;
-export const SECOND_EMPTY_DARK_VH = 150;
+// Scroll distances, in viewport heights.
+const WARNING_PIN_VH = 50; // extra scroll the warning stays pinned
+const WARNING_FADE_SCROLL_VH = 40; // warning fades out after the pin
+const DARKEN_COMPLETE_SCROLL_VH = 50; // light -> dark finishes across the pin
 
-const WARNING_SECTION_VH = 100;
-const WARNING_FADE_SCROLL_VH = 80;
-const DARKEN_COMPLETE_SCROLL_VH = 90;
+const FIRST_EMPTY_DARK_VH = 150;
 
 const IMAGE_REVEAL_VH = 80;
 const IMAGE_HOLD_VH = 100;
@@ -16,7 +16,9 @@ const IMAGE_EXIT_VH = 80;
 const IMAGE_TRANSPARENT_HOLD_VH = 30;
 const IMAGE_TRACK_VH = IMAGE_REVEAL_VH + IMAGE_HOLD_VH + IMAGE_EXIT_VH + IMAGE_TRANSPARENT_HOLD_VH + 100;
 
-const RETURN_LIGHT_SCROLL_VH = 100;
+const SECRET_PIN_VH = 50; // extra scroll the reveal stays pinned
+const RETURN_LIGHT_SCROLL_VH = 100; // dark -> light
+const SECRET_TAIL_VH = 100;
 
 function clamp01(v: number) {
   return v < 0 ? 0 : v > 1 ? 1 : v;
@@ -44,7 +46,7 @@ export default function DarkNarrativeChapter() {
 
   const bgColor = useMotionValue('rgb(251, 247, 239)');
   const warningHeadingColor = useMotionValue('rgb(61, 46, 34)');
-  const warningTextColor = useMotionValue('rgb(32, 27, 23)');
+  const warningTextColor = useMotionValue('rgb(231, 223, 210)');
   const warningMutedColor = useMotionValue('rgb(123, 98, 75)');
   const warningOpacity = useMotionValue(1);
   const warningVisibility = useMotionValue<'visible' | 'hidden'>('visible');
@@ -61,37 +63,32 @@ export default function DarkNarrativeChapter() {
       const vh = window.innerHeight || 1;
       const scrolled = -root.getBoundingClientRect().top;
 
+      const warningOuterPx = (WARNING_PIN_VH / 100) * vh + vh;
+      const warningHoldPx = (WARNING_PIN_VH / 100) * vh;
       const warningFadePx = (WARNING_FADE_SCROLL_VH / 100) * vh;
       const darkCompletePx = (DARKEN_COMPLETE_SCROLL_VH / 100) * vh;
-      const warningSectionPx = (WARNING_SECTION_VH / 100) * vh;
       const empty1Px = (FIRST_EMPTY_DARK_VH / 100) * vh;
       const trackPx = (IMAGE_TRACK_VH / 100) * vh;
-      const empty2Px = (SECOND_EMPTY_DARK_VH / 100) * vh;
       const returnPx = (RETURN_LIGHT_SCROLL_VH / 100) * vh;
 
-      const narrativeEl = root.querySelector('[data-narrative-section="true"]') as HTMLElement | null;
-      const narrativePx = narrativeEl ? narrativeEl.offsetHeight : 0;
-
-      const empty1Start = warningSectionPx;
-      const trackStart = empty1Start + empty1Px;
+      const trackStart = warningOuterPx + empty1Px;
       const trackEnd = trackStart + trackPx;
-
-      const empty2Start = trackEnd + narrativePx;
-      const empty2End = empty2Start + empty2Px;
-      const returnStart = empty2End;
+      const secretStart = trackEnd;
+      const returnStart = secretStart;
       const returnEnd = returnStart + returnPx;
 
       let darkValue = smoothstep(scrolled / Math.max(darkCompletePx, 1));
-      if (scrolled >= empty1Start && scrolled < returnStart) darkValue = 1;
+      if (scrolled >= warningOuterPx && scrolled < returnStart) darkValue = 1;
       if (scrolled >= returnStart) {
         darkValue = 1 - smoothstep((scrolled - returnStart) / Math.max(returnPx, 1));
       }
       if (scrolled <= 0 || scrolled >= returnEnd) darkValue = 0;
       darkValue = clamp01(darkValue);
 
-      let warningValue = 1 - smoothstep(scrolled / Math.max(warningFadePx, 1));
-      if (scrolled >= warningFadePx) warningValue = 0;
-      if (scrolled <= 0) warningValue = 1;
+      let warningValue = 1;
+      if (scrolled > warningHoldPx) {
+        warningValue = 1 - smoothstep((scrolled - warningHoldPx) / Math.max(warningFadePx, 1));
+      }
       warningValue = clamp01(warningValue);
 
       const pinnedPx = trackPx - vh;
@@ -115,11 +112,10 @@ export default function DarkNarrativeChapter() {
       imageValue = clamp01(imageValue);
 
       if (reducedMotion) {
-        warningValue = scrolled < warningFadePx ? 1 : 0;
-        if (scrolled >= empty1Start && scrolled < returnEnd) darkValue = 1;
+        warningValue = scrolled < warningHoldPx ? 1 : 0;
+        if (scrolled >= darkCompletePx * 0.5 && scrolled < returnStart + returnPx * 0.5) darkValue = 1;
         else darkValue = 0;
         if (scrolled <= 0) darkValue = 0;
-        if (scrolled >= returnStart) darkValue = 0;
         if (scrolled <= trackStart || imageProgressPx >= revealPx + holdPx + exitPx) imageValue = 0;
         else imageValue = 1;
       }
@@ -127,7 +123,7 @@ export default function DarkNarrativeChapter() {
       bgColor.set(mixRgb([251, 247, 239], [16, 14, 13], darkValue));
       warningHeadingColor.set(mixRgb([61, 46, 34], [248, 244, 236], darkValue));
       warningTextColor.set(mixRgb([32, 27, 23], [236, 231, 223], darkValue));
-      warningMutedColor.set(mixRgb([123, 98, 75], [196, 184, 170], darkValue));
+      warningMutedColor.set(mixRgb([123, 98, 75], [212, 178, 148], darkValue));
       warningOpacity.set(warningValue);
       warningVisibility.set(warningValue <= 0.01 ? 'hidden' : 'visible');
       imageOpacity.set(imageValue);
@@ -150,7 +146,16 @@ export default function DarkNarrativeChapter() {
       window.removeEventListener('resize', onScroll);
       ro.disconnect();
     };
-  }, [bgColor, warningHeadingColor, warningTextColor, warningMutedColor, warningOpacity, warningVisibility, imageOpacity, reducedMotion]);
+  }, [
+    bgColor,
+    warningHeadingColor,
+    warningTextColor,
+    warningMutedColor,
+    warningOpacity,
+    warningVisibility,
+    imageOpacity,
+    reducedMotion,
+  ]);
 
   return (
     <div ref={rootRef} className="relative">
@@ -160,34 +165,35 @@ export default function DarkNarrativeChapter() {
         style={{ backgroundColor: bgColor }}
       />
 
-      <section
-        className="relative flex items-center justify-center px-3 py-24 sm:px-5 lg:px-6"
-        style={{ minHeight: `${WARNING_SECTION_VH}svh` }}
-        aria-label="Beware the Witch Hunter"
-      >
-        <motion.div
-          className="mx-auto max-w-5xl text-center"
-          style={{
-            opacity: warningOpacity,
-            visibility: warningVisibility,
-            color: warningTextColor,
-          }}
+      <div style={{ height: `${WARNING_PIN_VH + 100}svh` }}>
+        <section
+          className="sticky top-0 flex h-[100svh] items-center justify-center px-3 sm:px-5 lg:px-6"
+          aria-label="Beware the Witch Hunter"
         >
-          <motion.h2
-            className="mt-6 font-display text-5xl leading-[0.92] sm:text-6xl md:text-7xl lg:text-8xl"
-            style={{ color: warningHeadingColor }}
+          <motion.div
+            className="mx-auto max-w-5xl text-center"
+            style={{
+              opacity: warningOpacity,
+              visibility: warningVisibility,
+              color: warningTextColor,
+            }}
           >
-            BEWARE THE WITCH HUNTER
-          </motion.h2>
-          <motion.p
-            className="mx-auto mt-8 max-w-2xl text-base leading-8 sm:text-lg sm:leading-9"
-            style={{ color: warningMutedColor }}
-          >
-            Every remedy you offer and every kindness at the counter carries a risk. In Brairwick, suspicion can turn
-            gratitude into fear, and a healer&apos;s secret can become a sentence.
-          </motion.p>
-        </motion.div>
-      </section>
+            <motion.h2
+              className="mt-6 font-display text-5xl leading-[0.92] sm:text-6xl md:text-7xl lg:text-8xl"
+              style={{ color: warningHeadingColor }}
+            >
+              BEWARE THE WITCH HUNTER
+            </motion.h2>
+            <motion.p
+              className="mx-auto mt-8 max-w-2xl text-base leading-8 sm:text-lg sm:leading-9"
+              style={{ color: warningMutedColor }}
+            >
+              Every remedy you offer and every kindness at the counter carries a risk. In Brairwick, suspicion can turn
+              gratitude into fear, and a healer&apos;s secret can become a sentence.
+            </motion.p>
+          </motion.div>
+        </section>
+      </div>
 
       <div aria-hidden="true" style={{ height: `${FIRST_EMPTY_DARK_VH}svh` }} />
 
@@ -203,31 +209,31 @@ export default function DarkNarrativeChapter() {
         </div>
       </section>
 
-      <section
-        data-narrative-section="true"
-        className="relative px-3 py-20 sm:px-5 sm:py-28 lg:px-6 lg:py-32"
-        aria-label="A Secret Revealed. A Life Lost."
-      >
-        <motion.div
-          className="mx-auto max-w-3xl text-center"
-          initial={reducedMotion ? false : { opacity: 0, y: 32 }}
-          whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
-          animate={reducedMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.85, ease: 'easeOut' }}
+      <div style={{ height: `${SECRET_PIN_VH + 100}svh` }}>
+        <section
+          className="sticky top-0 flex h-[100svh] items-center px-3 sm:px-5 lg:px-6"
+          aria-label="A Secret Revealed. A Life Lost."
         >
-          <h2 className="font-display text-4xl leading-tight text-[#f8f4ec] sm:text-5xl lg:text-6xl">
-            A Secret Revealed. A Life Lost.
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#e7dfd2] sm:text-lg sm:leading-9">
-            You have spent your days helping the villagers while keeping your magic hidden. But the witch hunter&apos;s
-            suspicion has closed in, and the memory spell failed. Your journey ends in flames.
-          </p>
-        </motion.div>
-      </section>
+          <motion.div
+            className="mx-auto max-w-3xl text-center"
+            initial={reducedMotion ? false : { opacity: 0, y: 32 }}
+            whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+            animate={reducedMotion ? { opacity: 1, y: 0 } : undefined}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.85, ease: 'easeOut' }}
+          >
+            <h2 className="font-display text-4xl leading-tight text-[#f8f4ec] sm:text-5xl lg:text-6xl">
+              A Secret Revealed. A Life Lost.
+            </h2>
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#e7dfd2] sm:text-lg sm:leading-9">
+              You have spent your days helping the villagers while keeping your magic hidden. But the witch hunter&apos;s
+              suspicion has closed in, and the memory spell failed. Your journey ends in flames.
+            </p>
+          </motion.div>
+        </section>
+      </div>
 
-      <div aria-hidden="true" style={{ height: `${SECOND_EMPTY_DARK_VH}svh` }} />
-      <div aria-hidden="true" style={{ height: `${RETURN_LIGHT_SCROLL_VH}svh` }} />
+      <div aria-hidden="true" style={{ height: `${SECRET_TAIL_VH}svh` }} />
     </div>
   );
 }
