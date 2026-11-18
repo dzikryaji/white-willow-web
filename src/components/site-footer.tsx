@@ -21,9 +21,7 @@ export function SiteFooter() {
               ))}
             </ul>
           </nav>
-          <p className="text-sm text-herb-muted">
-            {siteConfig.name} by {siteConfig.studio}
-          </p>
+          <img  src="/images/studio-icon.png" alt="Kuwa Kuwitch Studio Logo"  className="mx-auto w-80" />
         </div>
       </Container>
     </footer>

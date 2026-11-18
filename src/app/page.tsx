@@ -14,10 +14,10 @@ function SectionEyebrow({ children }: { children: React.ReactNode }) {
 export default function HomePage() {
   return (
     <div className="overflow-x-clip">
-      <section className="relative flex min-h-svh items-center pb-20 pt-28 sm:pb-24 sm:pt-32 lg:pt-36">
+      <section className="relative isolate flex min-h-svh items-center pb-20 pt-28 sm:pb-24 sm:pt-32 lg:pt-36">
         <div className="absolute inset-0 -z-10">
           <Image
-            src="/images/approved/MainMenuBackground.png"
+            src="/images/main-menu-background.png"
             alt="A medieval village scene surrounding White Willow"
             fill
             priority
@@ -83,7 +83,7 @@ export default function HomePage() {
               <figure className="space-y-3">
                 <div className="overflow-hidden">
                   <Image
-                    src="/images/stock/bruegel-haymaking-village.jpg"
+                    src="/images/bruegel-haymaking-village.jpg"
                     alt="A medieval village scene evoking Brairwick"
                     width={1200}
                     height={900}
@@ -112,7 +112,7 @@ export default function HomePage() {
               <figure className="space-y-3">
                 <div className="overflow-hidden">
                   <Image
-                    src="/images/stock/apothecary-interior.jpg"
+                    src="/images/apothecary-interior.jpg"
                     alt="An apothecary interior filled with jars and herbs"
                     width={1200}
                     height={900}
@@ -151,7 +151,7 @@ export default function HomePage() {
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
               <figure className="space-y-3 lg:pt-8">
                 <Image
-                  src="/images/stock/medical-substances-manuscript.jpg"
+                  src="/images/medical-substances-manuscript.jpg"
                   alt="A manuscript page of medical substances"
                   width={1000}
                   height={800}
@@ -189,7 +189,7 @@ export default function HomePage() {
             <AnimatedContent paperCrumple={0.42} paperSeed={13} distance={34} reverse duration={1} threshold={0.18} className="lg:order-1">
               <figure className="space-y-3">
                 <Image
-                  src="/images/stock/mandragora-tacuinum.jpg"
+                  src="/images/mandragora-tacuinum.jpg"
                   alt="A historical herbal illustration used as reference knowledge"
                   width={1000}
                   height={800}
@@ -230,7 +230,7 @@ export default function HomePage() {
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
               <figure className="space-y-3">
                 <Image
-                  src="/images/stock/alchemist-laboratory-wyck.jpg"
+                  src="/images/alchemist-laboratory-wyck.jpg"
                   alt="An alchemist laboratory scene representing potion preparation"
                   width={1200}
                   height={900}
@@ -298,7 +298,7 @@ export default function HomePage() {
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
               <figure className="space-y-3 lg:pt-8">
                 <Image
-                  src="/images/stock/mandragora-tacuinum.jpg"
+                  src="/images/mandragora-tacuinum.jpg"
                   alt="A herbal illustration representing memory, symbols, and observation"
                   width={1000}
                   height={800}

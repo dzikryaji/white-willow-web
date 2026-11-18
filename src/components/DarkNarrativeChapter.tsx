@@ -1,12 +1,22 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ScrollExpand from '@/components/ScrollExpand';
-import AnimatedContent from '@/components/AnimatedContent';
+import { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useReducedMotion } from 'motion/react';
 
-gsap.registerPlugin(ScrollTrigger);
+export const FIRST_EMPTY_DARK_VH = 150;
+export const SECOND_EMPTY_DARK_VH = 150;
+
+const WARNING_SECTION_VH = 100;
+const WARNING_FADE_SCROLL_VH = 80;
+const DARKEN_COMPLETE_SCROLL_VH = 90;
+
+const IMAGE_REVEAL_VH = 80;
+const IMAGE_HOLD_VH = 100;
+const IMAGE_EXIT_VH = 80;
+const IMAGE_TRANSPARENT_HOLD_VH = 30;
+const IMAGE_TRACK_VH = IMAGE_REVEAL_VH + IMAGE_HOLD_VH + IMAGE_EXIT_VH + IMAGE_TRANSPARENT_HOLD_VH + 100;
+
+const RETURN_LIGHT_SCROLL_VH = 100;
 
 function clamp01(v: number) {
   return v < 0 ? 0 : v > 1 ? 1 : v;
@@ -16,6 +26,11 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
+function smoothstep(t: number) {
+  const x = clamp01(t);
+  return x * x * (3 - 2 * x);
+}
+
 function mixRgb(from: [number, number, number], to: [number, number, number], t: number) {
   const r = Math.round(lerp(from[0], to[0], t));
   const g = Math.round(lerp(from[1], to[1], t));
@@ -23,147 +38,205 @@ function mixRgb(from: [number, number, number], to: [number, number, number], t:
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function mixRgba(
-  from: [number, number, number, number],
-  to: [number, number, number, number],
-  t: number,
-) {
-  const r = Math.round(lerp(from[0], to[0], t));
-  const g = Math.round(lerp(from[1], to[1], t));
-  const b = Math.round(lerp(from[2], to[2], t));
-  const a = lerp(from[3], to[3], t);
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
-}
-
 export default function DarkNarrativeChapter() {
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [reduced] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  });
+  const reducedMotion = useReducedMotion();
+
+  const bgColor = useMotionValue('rgb(251, 247, 239)');
+  const warningHeadingColor = useMotionValue('rgb(61, 46, 34)');
+  const warningTextColor = useMotionValue('rgb(32, 27, 23)');
+  const warningMutedColor = useMotionValue('rgb(123, 98, 75)');
+  const warningAccentColor = useMotionValue('rgb(90, 58, 40)');
+  const warningOpacity = useMotionValue(1);
+  const warningVisibility = useMotionValue<'visible' | 'hidden'>('visible');
+  const imageOpacity = useMotionValue(0);
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let raf = 0;
 
     const update = () => {
-      const rect = root.getBoundingClientRect();
+      raf = 0;
       const vh = window.innerHeight || 1;
-      const total = Math.max(root.offsetHeight - vh, 1);
-      const scrolled = clamp01(-rect.top / total);
-      let p = 0;
-      if (scrolled < 0.18) {
-        p = clamp01(scrolled / 0.18);
-      } else if (scrolled < 0.82) {
-        p = 1;
-      } else {
-        p = 1 - clamp01((scrolled - 0.82) / 0.18);
+      const scrolled = -root.getBoundingClientRect().top;
+
+      const warningFadePx = (WARNING_FADE_SCROLL_VH / 100) * vh;
+      const darkCompletePx = (DARKEN_COMPLETE_SCROLL_VH / 100) * vh;
+      const warningSectionPx = (WARNING_SECTION_VH / 100) * vh;
+      const empty1Px = (FIRST_EMPTY_DARK_VH / 100) * vh;
+      const trackPx = (IMAGE_TRACK_VH / 100) * vh;
+      const empty2Px = (SECOND_EMPTY_DARK_VH / 100) * vh;
+      const returnPx = (RETURN_LIGHT_SCROLL_VH / 100) * vh;
+
+      const narrativeEl = root.querySelector('[data-narrative-section="true"]') as HTMLElement | null;
+      const narrativePx = narrativeEl ? narrativeEl.offsetHeight : 0;
+
+      const empty1Start = warningSectionPx;
+      const trackStart = empty1Start + empty1Px;
+      const trackEnd = trackStart + trackPx;
+
+      const empty2Start = trackEnd + narrativePx;
+      const empty2End = empty2Start + empty2Px;
+      const returnStart = empty2End;
+      const returnEnd = returnStart + returnPx;
+
+      let darkValue = smoothstep(scrolled / Math.max(darkCompletePx, 1));
+      if (scrolled >= empty1Start && scrolled < returnStart) darkValue = 1;
+      if (scrolled >= returnStart) {
+        darkValue = 1 - smoothstep((scrolled - returnStart) / Math.max(returnPx, 1));
       }
-      setProgress(reduce ? (scrolled > 0.05 && scrolled < 0.95 ? 1 : 0) : p);
+      if (scrolled <= 0 || scrolled >= returnEnd) darkValue = 0;
+      darkValue = clamp01(darkValue);
+
+      let warningValue = 1 - smoothstep(scrolled / Math.max(warningFadePx, 1));
+      if (scrolled >= warningFadePx) warningValue = 0;
+      if (scrolled <= 0) warningValue = 1;
+      warningValue = clamp01(warningValue);
+
+      const pinnedPx = trackPx - vh;
+      const revealPx = (IMAGE_REVEAL_VH / 100) * vh;
+      const holdPx = (IMAGE_HOLD_VH / 100) * vh;
+      const exitPx = (IMAGE_EXIT_VH / 100) * vh;
+      const imageProgressPx = clamp01((scrolled - trackStart) / Math.max(pinnedPx, 1)) * pinnedPx;
+
+      let imageValue = 0;
+      if (scrolled <= trackStart) {
+        imageValue = 0;
+      } else if (imageProgressPx < revealPx) {
+        imageValue = smoothstep(imageProgressPx / Math.max(revealPx, 1));
+      } else if (imageProgressPx < revealPx + holdPx) {
+        imageValue = 1;
+      } else if (imageProgressPx < revealPx + holdPx + exitPx) {
+        imageValue = 1 - smoothstep((imageProgressPx - revealPx - holdPx) / Math.max(exitPx, 1));
+      } else {
+        imageValue = 0;
+      }
+      imageValue = clamp01(imageValue);
+
+      if (reducedMotion) {
+        warningValue = scrolled < warningFadePx ? 1 : 0;
+        if (scrolled >= empty1Start && scrolled < returnEnd) darkValue = 1;
+        else darkValue = 0;
+        if (scrolled <= 0) darkValue = 0;
+        if (scrolled >= returnStart) darkValue = 0;
+        if (scrolled <= trackStart || imageProgressPx >= revealPx + holdPx + exitPx) imageValue = 0;
+        else imageValue = 1;
+      }
+
+      bgColor.set(mixRgb([251, 247, 239], [16, 14, 13], darkValue));
+      warningHeadingColor.set(mixRgb([61, 46, 34], [248, 244, 236], darkValue));
+      warningTextColor.set(mixRgb([32, 27, 23], [236, 231, 223], darkValue));
+      warningMutedColor.set(mixRgb([123, 98, 75], [196, 184, 170], darkValue));
+      warningAccentColor.set(mixRgb([90, 58, 40], [212, 178, 148], darkValue));
+      warningOpacity.set(warningValue);
+      warningVisibility.set(warningValue <= 0.01 ? 'hidden' : 'visible');
+      imageOpacity.set(imageValue);
+    };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(update);
     };
 
     update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    const st = ScrollTrigger.create({ trigger: root, start: 'top bottom', end: 'bottom top', onUpdate: update });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    const ro = new ResizeObserver(onScroll);
+    ro.observe(root);
 
     return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
-      st.kill();
+      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      ro.disconnect();
     };
-  }, []);
-
-  const p = progress;
-  const bg = mixRgb([251, 247, 239], [18, 16, 14], p);
-  const fg = mixRgb([32, 27, 23], [245, 241, 232], p);
-  const heading = mixRgb([61, 46, 34], [248, 244, 236], p);
-  const muted = mixRgb([123, 98, 75], [190, 176, 160], p);
-  const accent = mixRgb([90, 58, 40], [214, 168, 132], p);
-  const border = mixRgba([90, 70, 52, 0.22], [245, 241, 232, 0.18], p);
+  }, [bgColor, warningHeadingColor, warningTextColor, warningMutedColor, warningAccentColor, warningOpacity, warningVisibility, imageOpacity, reducedMotion]);
 
   return (
     <div ref={rootRef} className="relative">
-      <div
+      <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-[5] transition-opacity duration-0"
-        style={{ backgroundColor: bg, opacity: 1 }}
+        className="pointer-events-none fixed inset-0 -z-[5]"
+        style={{ backgroundColor: bgColor }}
       />
-      <div
-        style={{
-          color: fg,
-          ['--ch-fg' as string]: fg,
-          ['--ch-heading' as string]: heading,
-          ['--ch-muted' as string]: muted,
-          ['--ch-accent' as string]: accent,
-          ['--ch-border' as string]: border,
-        }}
+
+      <section
+        className="relative flex items-center justify-center px-3 py-24 sm:px-5 lg:px-6"
+        style={{ minHeight: `${WARNING_SECTION_VH}svh` }}
+        aria-label="Beware the Witch Hunter"
       >
-        <section className="px-3 py-24 sm:px-5 sm:py-32 lg:px-6 lg:py-40">
-          <div className="mx-auto max-w-5xl text-center">
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.3em] sm:text-sm"
-              style={{ color: accent }}
-            >
-              A warning carried on the wind
-            </p>
-            <h2
-              className="mt-6 font-display text-5xl leading-[0.92] sm:text-6xl md:text-7xl lg:text-8xl"
-              style={{ color: heading }}
-            >
-              BEWARE THE WITCH HUNTER
-            </h2>
-            <p className="mx-auto mt-8 max-w-2xl text-base leading-8 sm:text-lg sm:leading-9" style={{ color: muted }}>
-              Every remedy you offer, every kind word at the counter, carries a risk. In Brairwick, suspicion can turn
-              gratitude into fear, and a healer&apos;s secret can become a sentence.
-            </p>
-          </div>
-        </section>
+        <motion.div
+          className="mx-auto max-w-5xl text-center"
+          style={{
+            opacity: warningOpacity,
+            visibility: warningVisibility,
+            color: warningTextColor,
+          }}
+        >
+          <motion.p
+            className="text-xs font-semibold uppercase tracking-[0.3em] sm:text-sm"
+            style={{ color: warningAccentColor }}
+          >
+            A warning carried on the wind
+          </motion.p>
+          <motion.h2
+            className="mt-6 font-display text-5xl leading-[0.92] sm:text-6xl md:text-7xl lg:text-8xl"
+            style={{ color: warningHeadingColor }}
+          >
+            BEWARE THE WITCH HUNTER
+          </motion.h2>
+          <motion.p
+            className="mx-auto mt-8 max-w-2xl text-base leading-8 sm:text-lg sm:leading-9"
+            style={{ color: warningMutedColor }}
+          >
+            Every remedy you offer and every kindness at the counter carries a risk. In Brairwick, suspicion can turn
+            gratitude into fear, and a healer&apos;s secret can become a sentence.
+          </motion.p>
+        </motion.div>
+      </section>
 
-        <section className="relative min-h-[100svh]">
-          <div className="mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-center px-3 py-16 sm:px-5 lg:px-6">
-            <div className="w-full max-w-4xl text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] sm:text-sm" style={{ color: accent }}>
-                If the secret is uncovered
-              </p>
-              <h3 className="mt-4 font-display text-4xl leading-tight sm:text-5xl lg:text-6xl" style={{ color: heading }}>
-                A Secret Revealed. A Life Lost.
-              </h3>
-              <p className="mx-auto mt-6 max-w-2xl text-base leading-8 sm:text-lg" style={{ color: muted }}>
-                You have spent your days helping the villagers while keeping your magic hidden. But suspicion has finally
-                caught up with you. The witch hunter has uncovered your secret, and the village turns against the very
-                healer it once welcomed. Your journey ends in flames.
-              </p>
-            </div>
-            <div className="mt-10 w-full">
-              <ScrollExpand
-                src="/images/approved/gameover-witch-burned.jpg"
-                alt="A tragic game over scene showing the consequence of being discovered as a witch"
-                useWindowScroll
-                scrollDistance={0.9}
-                holdDistance={0.25}
-                smoothing={reduced ? 0 : 0.12}
-                enabled={!reduced}
-                className="w-full"
-                mediaClassName="max-h-[62svh] w-auto max-w-[min(100%,56rem)]"
-              />
-            </div>
-          </div>
-        </section>
+      <div aria-hidden="true" style={{ height: `${FIRST_EMPTY_DARK_VH}svh` }} />
 
-        <section className="px-3 py-20 sm:px-5 sm:py-28 lg:px-6 lg:py-32">
-          <div className="mx-auto max-w-3xl text-center">
-            <AnimatedContent distance={28} duration={0.8} threshold={0.2}>
-              <p className="text-base leading-8 sm:text-lg" style={{ color: muted }}>
-                But the story does not have to end this way. With care, memory, and courage, you can keep the shop open
-                and the secret safe for one more day.
-              </p>
-            </AnimatedContent>
-          </div>
-        </section>
-      </div>
+      <section aria-label="Game over image" className="relative" style={{ height: `${IMAGE_TRACK_VH}svh` }}>
+        <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
+          <motion.img
+            src="/images/gameover-witch-burned.jpg"
+            alt="A tragic game over scene showing the consequence of being discovered as a witch"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            style={{ opacity: imageOpacity }}
+            draggable={false}
+          />
+        </div>
+      </section>
+
+      <section
+        data-narrative-section="true"
+        className="relative px-3 py-20 sm:px-5 sm:py-28 lg:px-6 lg:py-32"
+        aria-label="A Secret Revealed. A Life Lost."
+      >
+        <motion.div
+          className="mx-auto max-w-3xl text-center"
+          initial={reducedMotion ? false : { opacity: 0, y: 32 }}
+          whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+          animate={reducedMotion ? { opacity: 1, y: 0 } : undefined}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.85, ease: 'easeOut' }}
+        >
+          <h2 className="font-display text-4xl leading-tight text-[#f8f4ec] sm:text-5xl lg:text-6xl">
+            A Secret Revealed. A Life Lost.
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#e7dfd2] sm:text-lg sm:leading-9">
+            You have spent your days helping the villagers while keeping your magic hidden. But suspicion has finally
+            caught up with you. The witch hunter has uncovered your secret, and the village turns against the very
+            healer it once welcomed. Your journey ends in flames.
+          </p>
+        </motion.div>
+      </section>
+
+      <div aria-hidden="true" style={{ height: `${SECOND_EMPTY_DARK_VH}svh` }} />
+      <div aria-hidden="true" style={{ height: `${RETURN_LIGHT_SCROLL_VH}svh` }} />
     </div>
   );
 }
