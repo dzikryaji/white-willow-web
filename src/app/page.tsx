@@ -230,10 +230,10 @@ export default function HomePage() {
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
               <figure className="space-y-3 lg:pt-8">
                 <Image
-                  src="/images/mandragora-tacuinum.jpg"
-                  alt="A herbal illustration representing memory, symbols, and observation"
-                  width={1000}
-                  height={800}
+                  src="/images/minigame.png"
+                  alt="The Match Card minigame board"
+                  width={1200}
+                  height={665}
                   className="h-auto w-full"
                   sizes="(min-width: 1024px) 40vw, 100vw"
                 />
