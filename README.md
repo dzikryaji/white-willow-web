@@ -120,8 +120,8 @@ Home uses React Bits entrance and scroll animations: `FadeContent` for mount/scr
 
 ## Images and attribution
 
-- Game-related images live in `public/images/`: `studio-icon.png`, `main-menu-background.png`, `gameover-witch-burned.jpg`, `guidebook.png`.
-- Decorative stock/reference images and their sources/licenses are recorded in `licenses/STOCK-IMAGES.md`.
+- Game images live in `public/images/`: `village.png`, `shop.png`, `minigame.png`, `guidebook.png`, `studio-icon.png`, `main-menu-background.png`, `gameover-witch-burned.jpg`.
+- No third-party stock images remain; `licenses/STOCK-IMAGES.md` records that.
 - No unlicensed images or artwork from other games were added.
 
 ## Known limitations
