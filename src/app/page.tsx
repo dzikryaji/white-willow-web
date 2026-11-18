@@ -24,10 +24,10 @@ export default function HomePage() {
 
         <Container className="relative">
           <FadeContent trigger="mount" duration={1.1} blur={8} initialOpacity={0} className="max-w-4xl">
-            <h1 className="mt-18 font-display text-5xl leading-[0.95] text-forest sm:text-6xl md:text-7xl lg:text-8xl">
+            <h1 className="mt-18 font-display text-5xl leading-[0.95] text-[rgb(var(--page-heading))] sm:text-6xl md:text-7xl lg:text-8xl">
               White Willow
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-ink sm:text-lg sm:leading-8 lg:text-xl">
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[rgb(var(--page-fg))] sm:text-lg sm:leading-8 lg:text-xl">
               A cozy puzzle game set in the medieval era, where you play as a witch running an herb shop while hiding
               your true identity.
             </p>
@@ -39,10 +39,10 @@ export default function HomePage() {
         <Container>
           <FadeContent trigger="scroll" threshold={0.15} duration={0.9} blur={6} initialOpacity={0}>
             <div className="max-w-3xl">
-              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
+              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-[rgb(var(--page-heading))] sm:text-5xl lg:text-6xl">
                 A quiet shop in Brairwick
               </h2>
-              <p className="mt-5 text-base leading-8 text-ink/85 sm:text-lg">
+              <p className="mt-5 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                 Step behind the counter of White Willow, an ordinary herb shop with an extraordinary secret.
               </p>
             </div>
@@ -59,11 +59,11 @@ export default function HomePage() {
                 stagger={0.03}
                 mode="enter"
                 duration={0.9}
-                textClassName="!text-inherit !text-[length:inherit] !leading-[inherit] !font-normal font-display text-3xl leading-snug text-forest sm:text-4xl lg:text-5xl"
+                textClassName="!text-inherit !text-[length:inherit] !leading-[inherit] !font-normal font-display text-3xl leading-snug text-[rgb(var(--page-heading))] sm:text-4xl lg:text-5xl"
               >
                 You are a witch, living as a shopkeeper among the people of Brairwick.
               </ScrollReveal>
-              <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
+              <div className="mt-6 space-y-4 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                 <p>
                   Each day, villagers come to your door seeking relief from everyday troubles. You welcome them, listen
                   closely, and offer the help they need, all while keeping your magical identity hidden in plain sight.
@@ -90,7 +90,7 @@ export default function HomePage() {
                     sizes="(min-width: 1024px) 45vw, 100vw"
                   />
                 </div>
-                <figcaption className="text-sm leading-6 text-herb-muted">
+                <figcaption className="text-sm leading-6 text-[rgb(var(--page-muted))]">
                   A village of simple routines and quiet hopes.
                 </figcaption>
               </figure>
@@ -103,10 +103,10 @@ export default function HomePage() {
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15} className="lg:order-2">
-              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
+              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-[rgb(var(--page-heading))] sm:text-5xl lg:text-6xl">
                 Decode the riddle with the Book of Herbology
               </h2>
-              <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
+              <div className="mt-6 space-y-4 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                 <p>
                   Villagers rarely say exactly what they need. They arrive with riddles, metaphors, symptoms, and
                   half-told stories, and you have to understand the trouble behind their words.
@@ -132,7 +132,7 @@ export default function HomePage() {
                   className="h-auto w-full"
                   sizes="(min-width: 1024px) 45vw, 100vw"
                 />
-                <figcaption className="text-sm leading-6 text-herb-muted">
+                <figcaption className="text-sm leading-6 text-[rgb(var(--page-muted))]">
                   The Book of Herbology turns a riddled order into the exact pair of herbs.
                 </figcaption>
               </figure>
@@ -145,10 +145,10 @@ export default function HomePage() {
         <Container>
           <div className="mx-auto max-w-3xl">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
+              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-[rgb(var(--page-heading))] sm:text-5xl lg:text-6xl">
                 Prepare the remedy with care
               </h2>
-              <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
+              <div className="mt-6 space-y-4 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                 <p>
                   Once you understand the request, choose the exact pair of herbs, grind them, and brew the potion that
                   answers your customer&apos;s need.
@@ -171,33 +171,33 @@ export default function HomePage() {
                   className="h-auto w-full"
                   sizes="(min-width: 1024px) 50vw, 100vw"
                 />
-                <figcaption className="text-sm leading-6 text-herb-muted">
+                <figcaption className="text-sm leading-6 text-[rgb(var(--page-muted))]">
                   Careful hands and the right ingredients turn knowledge into healing.
                 </figcaption>
               </figure>
             </AnimatedContent>
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <div className="border-l border-[var(--line-strong)] pl-5 sm:pl-7">
-                <h3 className="font-display text-3xl leading-tight text-forest sm:text-4xl">The rhythm of each day</h3>
-                <ol className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
+              <div className="border-l border-[rgb(var(--page-line)/0.3)] pl-5 sm:pl-7">
+                <h3 className="font-display text-3xl leading-tight text-[rgb(var(--page-heading))] sm:text-4xl">The rhythm of each day</h3>
+                <ol className="mt-6 space-y-4 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                   <li>
-                    <span className="font-semibold text-forest">1. Customer arrives.</span> A villager brings a need
+                    <span className="font-semibold text-[rgb(var(--page-heading))]">1. Customer arrives.</span> A villager brings a need
                     wrapped in hints and uncertainty.
                   </li>
                   <li>
-                    <span className="font-semibold text-forest">2. Interpret the riddle.</span> Listen closely and make
+                    <span className="font-semibold text-[rgb(var(--page-heading))]">2. Interpret the riddle.</span> Listen closely and make
                     sense of what they are asking for.
                   </li>
                   <li>
-                    <span className="font-semibold text-forest">3. Consult the guidebook.</span> Connect symptoms and
+                    <span className="font-semibold text-[rgb(var(--page-heading))]">3. Consult the guidebook.</span> Connect symptoms and
                     clues to the right ingredients and remedies.
                   </li>
                   <li>
-                    <span className="font-semibold text-forest">4. Choose the exact pair.</span> Pick two different herbs
+                    <span className="font-semibold text-[rgb(var(--page-heading))]">4. Choose the exact pair.</span> Pick two different herbs
                     from the same treatment category.
                   </li>
                   <li>
-                    <span className="font-semibold text-forest">5. Grind, brew, and serve.</span> Prepare the potion and
+                    <span className="font-semibold text-[rgb(var(--page-heading))]">5. Grind, brew, and serve.</span> Prepare the potion and
                     serve your customer before the clock runs out.
                   </li>
                 </ol>
@@ -213,10 +213,10 @@ export default function HomePage() {
         <Container>
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
+              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-[rgb(var(--page-heading))] sm:text-5xl lg:text-6xl">
                 Match the cards, cast the memory spell
               </h2>
-              <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
+              <div className="mt-6 space-y-4 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                 <p>
                   When suspicion reaches three, the witch hunter comes to the shop. To survive the visit, you cast a
                   memory spell that makes him forget what he suspects.
@@ -237,7 +237,7 @@ export default function HomePage() {
                   className="h-auto w-full"
                   sizes="(min-width: 1024px) 40vw, 100vw"
                 />
-                <figcaption className="text-sm leading-6 text-herb-muted">
+                <figcaption className="text-sm leading-6 text-[rgb(var(--page-muted))]">
                   Turn over the cards, match every pair, and the memory spell is cast.
                 </figcaption>
               </figure>
@@ -250,10 +250,10 @@ export default function HomePage() {
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <FadeContent trigger="scroll" threshold={0.15} duration={0.9} blur={6} initialOpacity={0}>
-              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
+              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-[rgb(var(--page-heading))] sm:text-5xl lg:text-6xl">
                 Keep the shop running, day after day
               </h2>
-              <p className="mt-5 text-base leading-8 text-ink/85 sm:text-lg">
+              <p className="mt-5 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                 Your journey in White Willow unfolds across 14 days. Each workday runs on a five-minute clock, and each
                 day ends with an expense you must pay. Survive all 14 days and save enough money to return home to your
                 village.
@@ -289,9 +289,9 @@ export default function HomePage() {
               },
             ].map((item, index) => (
               <AnimatedContent key={item.title} distance={28} duration={0.8} threshold={0.12} delay={index * 0.03}>
-                <div className="h-full border-t border-[var(--line-strong)] pt-5">
-                  <h3 className="font-display text-2xl leading-tight text-forest sm:text-[1.7rem]">{item.title}</h3>
-                  <p className="mt-3 text-base leading-8 text-ink/85">{item.text}</p>
+                <div className="h-full border-t border-[rgb(var(--page-line)/0.3)] pt-5">
+                  <h3 className="font-display text-2xl leading-tight text-[rgb(var(--page-heading))] sm:text-[1.7rem]">{item.title}</h3>
+                  <p className="mt-3 text-base leading-8 text-[rgb(var(--page-fg)/0.85)]">{item.text}</p>
                 </div>
               </AnimatedContent>
             ))}
@@ -303,24 +303,24 @@ export default function HomePage() {
         <Container>
           <AnimatedContent distance={32} duration={0.85} threshold={0.12}>
             <div className="mx-auto max-w-3xl text-center">
-              <h2 className="mt-4 font-display text-4xl leading-tight text-forest sm:text-5xl lg:text-6xl">
+              <h2 className="mt-4 font-display text-4xl leading-tight text-[rgb(var(--page-heading))] sm:text-5xl lg:text-6xl">
                 Keep the shop open. Keep the secret safe.
               </h2>
-              <p className="mt-6 text-base leading-8 text-ink/85 sm:text-lg">
+              <p className="mt-6 text-base leading-8 text-[rgb(var(--page-fg)/0.85)] sm:text-lg">
                 Brew cures, solve riddled orders, and live quietly in Brairwick for as long as you can.
               </p>
               <div className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-5">
                 {siteConfig.testFlightUrl ? (
                   <a
                     href={siteConfig.testFlightUrl}
-                    className="inline-flex items-center justify-center border border-[rgba(61,46,34,0.45)] bg-[rgba(61,46,34,0.92)] px-6 py-3 text-sm font-semibold tracking-[0.08em] !text-paper no-underline transition-colors hover:bg-forest hover:!text-paper"
+                    className="inline-flex items-center justify-center border border-[rgb(var(--page-line)/0.45)] bg-[rgb(var(--page-heading))] px-6 py-3 text-sm font-semibold tracking-[0.08em] !text-[rgb(var(--page-bg))] no-underline hover:bg-[rgb(var(--page-accent))] hover:!text-[rgb(var(--page-bg))]"
                   >
                     {siteConfig.testFlightLabel}
                   </a>
                 ) : null}
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center border border-[rgba(61,46,34,0.45)] bg-[rgba(251,247,239,0.7)] px-6 py-3 text-sm font-semibold tracking-[0.08em] text-forest no-underline transition-colors hover:bg-[rgba(244,236,222,0.9)]"
+                  className="inline-flex items-center justify-center border border-[rgb(var(--page-line)/0.45)] bg-[rgb(var(--page-bg)/0.7)] px-6 py-3 text-sm font-semibold tracking-[0.08em] text-[rgb(var(--page-heading))] no-underline hover:bg-[rgb(var(--page-bg)/0.9)]"
                 >
                   Contact the studio
                 </Link>

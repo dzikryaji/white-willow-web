@@ -20,6 +20,42 @@ const SECRET_PIN_VH = 50; // extra scroll the reveal stays pinned
 const RETURN_LIGHT_SCROLL_VH = 100; // dark -> light
 const SECRET_TAIL_VH = 100;
 
+// The background crossfades through mid grey, where a text color blended between the two
+// palette ends would drop to about 1:1. Text instead ramps to pure black before the
+// background turns dark and snaps to pure white once it is dark. The swap sits at the
+// background luminance where black and white reach the same contrast (about 4.58:1), so
+// both sides of the switch stay above AA. Pure black and white are only transient here;
+// the palette values still sit at both ends of the scroll.
+const TEXT_SWAP = 0.558;
+const TEXT_RAMP = 0.3;
+
+type Channels = string;
+
+const BLACK: Channels = '0 0 0';
+const WHITE: Channels = '255 255 255';
+
+const LIGHT = {
+  bg: '251 247 239',
+  fg: '32 27 23',
+  heading: '61 46 34',
+  muted: '138 118 100',
+  subtle: '123 98 75',
+  accent: '90 58 40',
+  line: '61 46 34',
+  halo: '251 247 239',
+};
+
+const DARK = {
+  bg: '16 14 13',
+  fg: '231 223 210',
+  heading: '248 244 236',
+  muted: '196 184 170',
+  subtle: '212 178 148',
+  accent: '214 170 140',
+  line: '248 244 236',
+  halo: '16 14 13',
+};
+
 function clamp01(v: number) {
   return v < 0 ? 0 : v > 1 ? 1 : v;
 }
@@ -33,21 +69,32 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
-function mixRgb(from: [number, number, number], to: [number, number, number], t: number) {
-  const r = Math.round(lerp(from[0], to[0], t));
-  const g = Math.round(lerp(from[1], to[1], t));
-  const b = Math.round(lerp(from[2], to[2], t));
-  return `rgb(${r}, ${g}, ${b})`;
+function parseChannels(value: Channels): [number, number, number] {
+  const [r, g, b] = value.split(' ').map(Number);
+  return [r, g, b];
+}
+
+function mixChannels(from: Channels, to: Channels, t: number): Channels {
+  const a = parseChannels(from);
+  const b = parseChannels(to);
+  return `${Math.round(lerp(a[0], b[0], t))} ${Math.round(lerp(a[1], b[1], t))} ${Math.round(lerp(a[2], b[2], t))}`;
+}
+
+// Contrast-safe text color for a given background progress: ramp to black, snap to white,
+// then ease to the dark-end palette color.
+function pageColor(lightCh: Channels, darkCh: Channels, dv: number): Channels {
+  if (dv <= 0) return lightCh;
+  if (dv >= 1) return darkCh;
+  if (dv < TEXT_SWAP) {
+    return mixChannels(lightCh, BLACK, clamp01(dv / TEXT_RAMP));
+  }
+  return mixChannels(WHITE, darkCh, clamp01((dv - TEXT_SWAP) / TEXT_RAMP));
 }
 
 export default function DarkNarrativeChapter() {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const reducedMotion = useReducedMotion();
 
-  const bgColor = useMotionValue('rgb(251, 247, 239)');
-  const warningHeadingColor = useMotionValue('rgb(61, 46, 34)');
-  const warningTextColor = useMotionValue('rgb(231, 223, 210)');
-  const warningMutedColor = useMotionValue('rgb(123, 98, 75)');
   const warningOpacity = useMotionValue(1);
   const warningVisibility = useMotionValue<'visible' | 'hidden'>('visible');
   const imageOpacity = useMotionValue(0);
@@ -56,6 +103,7 @@ export default function DarkNarrativeChapter() {
     const root = rootRef.current;
     if (!root) return;
 
+    const docStyle = document.documentElement.style;
     let raf = 0;
 
     const update = () => {
@@ -74,6 +122,10 @@ export default function DarkNarrativeChapter() {
       const trackStart = warningOuterPx + empty1Px;
       const trackEnd = trackStart + trackPx;
       const secretStart = trackEnd;
+      // Light returns across the secret section. A return placed after the section would
+      // need a ~200vh empty gap, otherwise the next section's translucent body text sits
+      // on the half-lit background during the fade. Text switches to black before the
+      // background gets light, so this range stays above AA.
       const returnStart = secretStart;
       const returnEnd = returnStart + returnPx;
 
@@ -120,10 +172,16 @@ export default function DarkNarrativeChapter() {
         else imageValue = 1;
       }
 
-      bgColor.set(mixRgb([251, 247, 239], [16, 14, 13], darkValue));
-      warningHeadingColor.set(mixRgb([61, 46, 34], [248, 244, 236], darkValue));
-      warningTextColor.set(mixRgb([32, 27, 23], [236, 231, 223], darkValue));
-      warningMutedColor.set(mixRgb([123, 98, 75], [212, 178, 148], darkValue));
+      // One scroll-linked source for every color on the home page.
+      docStyle.setProperty('--page-bg', mixChannels(LIGHT.bg, DARK.bg, darkValue));
+      docStyle.setProperty('--page-fg', pageColor(LIGHT.fg, DARK.fg, darkValue));
+      docStyle.setProperty('--page-heading', pageColor(LIGHT.heading, DARK.heading, darkValue));
+      docStyle.setProperty('--page-muted', pageColor(LIGHT.muted, DARK.muted, darkValue));
+      docStyle.setProperty('--page-subtle', pageColor(LIGHT.subtle, DARK.subtle, darkValue));
+      docStyle.setProperty('--page-accent', pageColor(LIGHT.accent, DARK.accent, darkValue));
+      docStyle.setProperty('--page-line', pageColor(LIGHT.line, DARK.line, darkValue));
+      docStyle.setProperty('--page-halo', mixChannels(LIGHT.halo, DARK.halo, darkValue));
+
       warningOpacity.set(warningValue);
       warningVisibility.set(warningValue <= 0.01 ? 'hidden' : 'visible');
       imageOpacity.set(imageValue);
@@ -145,24 +203,27 @@ export default function DarkNarrativeChapter() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       ro.disconnect();
+      for (const key of [
+        '--page-bg',
+        '--page-fg',
+        '--page-heading',
+        '--page-muted',
+        '--page-subtle',
+        '--page-accent',
+        '--page-line',
+        '--page-halo',
+      ]) {
+        docStyle.removeProperty(key);
+      }
     };
-  }, [
-    bgColor,
-    warningHeadingColor,
-    warningTextColor,
-    warningMutedColor,
-    warningOpacity,
-    warningVisibility,
-    imageOpacity,
-    reducedMotion,
-  ]);
+  }, [reducedMotion, warningOpacity, warningVisibility, imageOpacity]);
 
   return (
     <div ref={rootRef} className="relative">
-      <motion.div
+      <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-[5]"
-        style={{ backgroundColor: bgColor }}
+        style={{ backgroundColor: 'rgb(var(--page-bg))' }}
       />
 
       <div style={{ height: `${WARNING_PIN_VH + 100}svh` }}>
@@ -175,19 +236,12 @@ export default function DarkNarrativeChapter() {
             style={{
               opacity: warningOpacity,
               visibility: warningVisibility,
-              color: warningTextColor,
             }}
           >
-            <motion.h2
-              className="mt-6 font-display text-5xl leading-[0.92] sm:text-6xl md:text-7xl lg:text-8xl"
-              style={{ color: warningHeadingColor }}
-            >
+            <motion.h2 className="mt-6 font-display text-5xl leading-[0.92] text-[rgb(var(--page-heading))] sm:text-6xl md:text-7xl lg:text-8xl">
               BEWARE THE WITCH HUNTER
             </motion.h2>
-            <motion.p
-              className="mx-auto mt-8 max-w-2xl text-base leading-8 sm:text-lg sm:leading-9"
-              style={{ color: warningMutedColor }}
-            >
+            <motion.p className="mx-auto mt-8 max-w-2xl text-base leading-8 text-[rgb(var(--page-subtle))] sm:text-lg sm:leading-9">
               Every remedy you offer and every kindness at the counter carries a risk. In Brairwick, suspicion can turn
               gratitude into fear, and a healer&apos;s secret can become a sentence.
             </motion.p>
@@ -222,10 +276,10 @@ export default function DarkNarrativeChapter() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.85, ease: 'easeOut' }}
           >
-            <h2 className="font-display text-4xl leading-tight text-[#f8f4ec] sm:text-5xl lg:text-6xl">
+            <h2 className="font-display text-4xl leading-tight text-[rgb(var(--page-heading))] sm:text-5xl lg:text-6xl">
               A Secret Revealed. A Life Lost.
             </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#e7dfd2] sm:text-lg sm:leading-9">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[rgb(var(--page-fg))] sm:text-lg sm:leading-9">
               You have spent your days helping the villagers while keeping your magic hidden. But the witch hunter&apos;s
               suspicion has closed in, and the memory spell failed. Your journey ends in flames.
             </p>

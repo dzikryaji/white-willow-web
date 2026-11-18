@@ -13,7 +13,7 @@ export function SiteFooter() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm tracking-[0.08em] text-bark-soft no-underline transition-colors hover:text-forest"
+                    className="text-sm tracking-[0.08em] text-[rgb(var(--page-subtle))] no-underline hover:text-[rgb(var(--page-heading))]"
                   >
                     {item.label}
                   </Link>

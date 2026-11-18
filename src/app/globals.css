@@ -15,7 +15,18 @@
   --ember: #5a3a28;
   --rust: #6b4a34;
   --line-strong: rgba(61, 46, 34, 0.3);
-  --focus: #3d2e22;
+
+  /* Scroll-linked page palette (RGB channels). DarkNarrativeChapter updates these on
+     the home page so every color follows the background as it goes light -> dark -> light.
+     The values here are the light ends, so every other page renders unchanged. */
+  --page-bg: 251 247 239;
+  --page-fg: 32 27 23;
+  --page-heading: 61 46 34;
+  --page-muted: 138 118 100;
+  --page-subtle: 123 98 75;
+  --page-accent: 90 58 40;
+  --page-line: 61 46 34;
+  --page-halo: 251 247 239;
 }
 
 @theme inline {
@@ -40,8 +51,8 @@ html {
 }
 
 body {
-  background-color: var(--paper);
-  color: var(--ink);
+  background-color: rgb(var(--page-bg));
+  color: rgb(var(--page-fg));
   font-family: var(--font-body), Georgia, "Times New Roman", serif;
   line-height: 1.7;
   text-rendering: optimizeLegibility;
@@ -52,22 +63,22 @@ body {
 }
 
 ::selection {
-  background: rgba(61, 46, 34, 0.18);
-  color: var(--ink);
+  background: rgb(var(--page-heading) / 0.18);
+  color: rgb(var(--page-fg));
 }
 
 a {
-  color: var(--forest);
+  color: rgb(var(--page-heading));
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
 
 a:hover {
-  color: var(--ember);
+  color: rgb(var(--page-accent));
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus);
+  outline: 2px solid rgb(var(--page-heading));
   outline-offset: 3px;
 }
 

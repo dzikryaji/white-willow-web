@@ -21,8 +21,10 @@ export function SiteHeader() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "inline-block px-1 py-1 text-sm font-medium tracking-[0.12em] no-underline transition-colors [text-shadow:0_1px_10px_rgba(251,247,239,0.45)] sm:text-[0.95rem]",
-                      active ? "text-forest" : "text-bark-soft hover:text-forest",
+                      "inline-block px-1 py-1 text-sm font-medium tracking-[0.12em] no-underline [text-shadow:0_1px_10px_rgb(var(--page-halo)/0.45)] sm:text-[0.95rem]",
+                      active
+                        ? "text-[rgb(var(--page-heading))]"
+                        : "text-[rgb(var(--page-subtle))] hover:text-[rgb(var(--page-heading))]",
                     )}
                     aria-current={active ? "page" : undefined}
                   >
