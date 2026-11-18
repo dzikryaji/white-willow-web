@@ -5,7 +5,6 @@ export default function NotFound() {
   return (
     <Container className="py-24 sm:py-32">
       <div className="mx-auto max-w-xl text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-bark-soft">Page not found</p>
         <h1 className="mt-4 font-display text-5xl text-forest sm:text-6xl">A missing page</h1>
         <p className="mt-5 leading-8 text-ink/85">
           The page you were looking for is not here. You can return to the story of White Willow from the home page.

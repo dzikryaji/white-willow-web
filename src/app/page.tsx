@@ -7,10 +7,6 @@ import DarkNarrativeChapter from "@/components/DarkNarrativeChapter";
 import { Container } from "@/components/container";
 import { siteConfig } from "@/lib/site";
 
-function SectionEyebrow({ children }: { children: React.ReactNode }) {
-  return <p className="text-xs font-semibold uppercase tracking-[0.24em] text-bark-soft sm:text-sm">{children}</p>;
-}
-
 export default function HomePage() {
   return (
     <div className="overflow-x-clip">
@@ -43,7 +39,6 @@ export default function HomePage() {
         <Container>
           <FadeContent trigger="scroll" threshold={0.15} duration={0.9} blur={6} initialOpacity={0}>
             <div className="max-w-3xl">
-              <SectionEyebrow>The witch and her herb shop</SectionEyebrow>
               <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
                 A quiet shop in Brairwick
               </h2>
@@ -133,7 +128,6 @@ export default function HomePage() {
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15} className="lg:order-2">
-              <SectionEyebrow>Riddled orders and the guidebook</SectionEyebrow>
               <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
                 Decode the riddle with the Book of Herbology
               </h2>
@@ -176,7 +170,6 @@ export default function HomePage() {
         <Container>
           <div className="mx-auto max-w-3xl">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <SectionEyebrow>Create the potion</SectionEyebrow>
               <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
                 Prepare the remedy with care
               </h2>
@@ -245,7 +238,6 @@ export default function HomePage() {
         <Container>
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <SectionEyebrow>Match Card minigame</SectionEyebrow>
               <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
                 Match the cards, cast the memory spell
               </h2>
@@ -283,7 +275,6 @@ export default function HomePage() {
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <FadeContent trigger="scroll" threshold={0.15} duration={0.9} blur={6} initialOpacity={0}>
-              <SectionEyebrow>Survive 14 days</SectionEyebrow>
               <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
                 Keep the shop running, day after day
               </h2>
@@ -337,7 +328,6 @@ export default function HomePage() {
         <Container>
           <AnimatedContent distance={32} duration={0.85} threshold={0.12}>
             <div className="mx-auto max-w-3xl text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-bark-soft">White Willow</p>
               <h2 className="mt-4 font-display text-4xl leading-tight text-forest sm:text-5xl lg:text-6xl">
                 Keep the shop open. Keep the secret safe.
               </h2>

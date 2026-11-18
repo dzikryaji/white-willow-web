@@ -46,7 +46,6 @@ export default function DarkNarrativeChapter() {
   const warningHeadingColor = useMotionValue('rgb(61, 46, 34)');
   const warningTextColor = useMotionValue('rgb(32, 27, 23)');
   const warningMutedColor = useMotionValue('rgb(123, 98, 75)');
-  const warningAccentColor = useMotionValue('rgb(90, 58, 40)');
   const warningOpacity = useMotionValue(1);
   const warningVisibility = useMotionValue<'visible' | 'hidden'>('visible');
   const imageOpacity = useMotionValue(0);
@@ -129,7 +128,6 @@ export default function DarkNarrativeChapter() {
       warningHeadingColor.set(mixRgb([61, 46, 34], [248, 244, 236], darkValue));
       warningTextColor.set(mixRgb([32, 27, 23], [236, 231, 223], darkValue));
       warningMutedColor.set(mixRgb([123, 98, 75], [196, 184, 170], darkValue));
-      warningAccentColor.set(mixRgb([90, 58, 40], [212, 178, 148], darkValue));
       warningOpacity.set(warningValue);
       warningVisibility.set(warningValue <= 0.01 ? 'hidden' : 'visible');
       imageOpacity.set(imageValue);
@@ -152,7 +150,7 @@ export default function DarkNarrativeChapter() {
       window.removeEventListener('resize', onScroll);
       ro.disconnect();
     };
-  }, [bgColor, warningHeadingColor, warningTextColor, warningMutedColor, warningAccentColor, warningOpacity, warningVisibility, imageOpacity, reducedMotion]);
+  }, [bgColor, warningHeadingColor, warningTextColor, warningMutedColor, warningOpacity, warningVisibility, imageOpacity, reducedMotion]);
 
   return (
     <div ref={rootRef} className="relative">
@@ -175,12 +173,6 @@ export default function DarkNarrativeChapter() {
             color: warningTextColor,
           }}
         >
-          <motion.p
-            className="text-xs font-semibold uppercase tracking-[0.3em] sm:text-sm"
-            style={{ color: warningAccentColor }}
-          >
-            A warning carried on the wind
-          </motion.p>
           <motion.h2
             className="mt-6 font-display text-5xl leading-[0.92] sm:text-6xl md:text-7xl lg:text-8xl"
             style={{ color: warningHeadingColor }}
