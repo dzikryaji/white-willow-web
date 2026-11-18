@@ -72,51 +72,26 @@ export default function HomePage() {
                   The shop is warm and familiar, but every kindness is careful. To belong in Brairwick, you must seem
                   ordinary, even when your craft is anything but.
                 </p>
-              </div>
-            </AnimatedContent>
-            <AnimatedContent paperCrumple={0.48} paperSeed={7} distance={34} reverse duration={1} threshold={0.18}>
-              <figure className="space-y-3">
-                <div className="overflow-hidden">
-                  <Image
-                    src="/images/bruegel-haymaking-village.jpg"
-                    alt="A medieval village scene evoking Brairwick"
-                    width={1200}
-                    height={900}
-                    className="h-auto w-full"
-                    sizes="(min-width: 1024px) 45vw, 100vw"
-                  />
-                </div>
-                <figcaption className="text-sm leading-6 text-herb-muted">
-                  Brairwick is a place of simple routines, watchful neighbors, and quiet hopes.
-                </figcaption>
-              </figure>
-            </AnimatedContent>
-          </div>
-
-          <div className="mt-20 grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
-            <AnimatedContent distance={34} duration={0.85} threshold={0.18} className="lg:order-2">
-              <h3 className="font-display text-3xl leading-tight text-forest sm:text-4xl">Help arrives in small remedies</h3>
-              <div className="mt-5 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
                 <p>
                   Your shelves hold herbs, notes, and preparations for the ailments and worries that bring people to your
                   door. To the village, you are a helpful herbalist. Only you know the truth you must protect.
                 </p>
               </div>
             </AnimatedContent>
-            <AnimatedContent paperCrumple={0.48} paperSeed={11} distance={34} reverse duration={1} threshold={0.18} className="lg:order-1">
+            <AnimatedContent paperCrumple={0.48} paperSeed={7} distance={34} reverse duration={1} threshold={0.18}>
               <figure className="space-y-3">
                 <div className="overflow-hidden">
                   <Image
-                    src="/images/apothecary-interior.jpg"
-                    alt="An apothecary interior filled with jars and herbs"
-                    width={1200}
-                    height={900}
+                    src="/images/village.png"
+                    alt="A medieval village scene evoking Brairwick"
+                    width={1376}
+                    height={768}
                     className="h-auto w-full"
                     sizes="(min-width: 1024px) 45vw, 100vw"
                   />
                 </div>
                 <figcaption className="text-sm leading-6 text-herb-muted">
-                  Jars, bundles, and careful preparations line the heart of the shop.
+                  A village of simple routines and quiet hopes.
                 </figcaption>
               </figure>
             </AnimatedContent>
