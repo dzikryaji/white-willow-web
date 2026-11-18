@@ -14,10 +14,7 @@
   --bark-soft: #7b624b;
   --ember: #5a3a28;
   --rust: #6b4a34;
-  --line: rgba(90, 70, 52, 0.22);
   --line-strong: rgba(61, 46, 34, 0.3);
-  --surface: rgba(255, 252, 246, 0.72);
-  --surface-strong: rgba(244, 236, 222, 0.82);
   --focus: #3d2e22;
 }
 
@@ -91,23 +88,6 @@ a:hover {
 
 .font-display {
   font-family: var(--font-display), cursive, "Times New Roman", serif;
-}
-
-.dropcap::first-letter {
-  float: left;
-  font-family: var(--font-display), cursive, Georgia, serif;
-  font-size: 3.2rem;
-  line-height: 0.85;
-  padding: 0.2rem 0.45rem 0 0;
-  color: var(--forest);
-}
-
-.story-lines p {
-  margin: 0;
-}
-
-.story-lines p + p {
-  margin-top: 0.15rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
