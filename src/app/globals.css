@@ -1,26 +1,126 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #fbf7ef;
+  --paper-deep: #f4ecde;
+  --bone: #f7f1e3;
+  --ivory: #efe6d4;
+  --ink: #201b17;
+  --forest: #3d2e22;
+  --herb: #6b5646;
+  --herb-muted: #8a7664;
+  --bark: #5a4634;
+  --bark-soft: #7b624b;
+  --ember: #5a3a28;
+  --rust: #6b4a34;
+  --line: rgba(90, 70, 52, 0.22);
+  --line-strong: rgba(61, 46, 34, 0.3);
+  --surface: rgba(255, 252, 246, 0.72);
+  --surface-strong: rgba(244, 236, 222, 0.82);
+  --focus: #3d2e22;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-bone: var(--bone);
+  --color-ivory: var(--ivory);
+  --color-ink: var(--ink);
+  --color-forest: var(--forest);
+  --color-herb: var(--herb);
+  --color-herb-muted: var(--herb-muted);
+  --color-bark: var(--bark);
+  --color-bark-soft: var(--bark-soft);
+  --color-ember: var(--ember);
+  --color-rust: var(--rust);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), Georgia, "Times New Roman", serif;
+  line-height: 1.7;
+  text-rendering: optimizeLegibility;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(138, 118, 100, 0.05), transparent 28%),
+    radial-gradient(circle at 85% 10%, rgba(107, 74, 52, 0.04), transparent 22%),
+    radial-gradient(circle at 50% 100%, rgba(90, 70, 52, 0.05), transparent 30%);
+}
+
+::selection {
+  background: rgba(61, 46, 34, 0.18);
+  color: var(--ink);
+}
+
+a {
+  color: var(--forest);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--ember);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--paper-deep);
+  color: var(--ink);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line-strong);
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+.font-display {
+  font-family: var(--font-display), cursive, "Times New Roman", serif;
+}
+
+.dropcap::first-letter {
+  float: left;
+  font-family: var(--font-display), cursive, Georgia, serif;
+  font-size: 3.2rem;
+  line-height: 0.85;
+  padding: 0.2rem 0.45rem 0 0;
+  color: var(--forest);
+}
+
+.story-lines p {
+  margin: 0;
+}
+
+.story-lines p + p {
+  margin-top: 0.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

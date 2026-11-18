@@ -1,0 +1,49 @@
+.scroll-expand {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-expand--scroller {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior: contain;
+}
+
+.scroll-expand--scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-expand__track {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-expand__stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.scroll-expand__frame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-expand__media {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 72rem);
+  max-height: 72svh;
+  object-fit: contain;
+  opacity: 0;
+  will-change: opacity;
+  user-select: none;
+  -webkit-user-drag: none;
+}
