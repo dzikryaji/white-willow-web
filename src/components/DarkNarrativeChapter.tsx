@@ -228,9 +228,8 @@ export default function DarkNarrativeChapter() {
             A Secret Revealed. A Life Lost.
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#e7dfd2] sm:text-lg sm:leading-9">
-            You have spent your days helping the villagers while keeping your magic hidden. But suspicion has finally
-            caught up with you. The witch hunter has uncovered your secret, and the village turns against the very
-            healer it once welcomed. Your journey ends in flames.
+            You have spent your days helping the villagers while keeping your magic hidden. But the witch hunter&apos;s
+            suspicion has closed in, and the memory spell failed. Your journey ends in flames.
           </p>
         </motion.div>
       </section>

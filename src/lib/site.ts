@@ -6,7 +6,6 @@ export const siteConfig = {
   contactEmail: "kuwakuwitch@gmail.com",
   testFlightUrl: "https://testflight.apple.com/join/UAeWFbJN" as string | null,
   testFlightLabel: "Join TestFlight",
-  platform: "macOS project",
   nav: [
     { href: "/", label: "Home" },
     { href: "/contact", label: "Contact" },

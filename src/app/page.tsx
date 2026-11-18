@@ -129,75 +129,42 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section id="riddled-orders" className="py-16 sm:py-24 lg:py-28">
-        <Container>
-          <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-            <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <SectionEyebrow>Riddled orders</SectionEyebrow>
-              <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
-                Listen for what is not said
-              </h2>
-              <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
-                <p>
-                  Villagers rarely tell you exactly what they need. They arrive with riddles, metaphors, symptoms, and
-                  incomplete descriptions, hoping you can understand the trouble behind their words.
-                </p>
-                <p>
-                  As the witch of White Willow, you must interpret each request carefully. What sounds like a strange
-                  complaint or a half-told story may be the clue that leads to the right remedy.
-                </p>
-              </div>
-            </AnimatedContent>
-            <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <figure className="space-y-3 lg:pt-8">
-                <Image
-                  src="/images/medical-substances-manuscript.jpg"
-                  alt="A manuscript page of medical substances"
-                  width={1000}
-                  height={800}
-                  className="h-auto w-full"
-                  sizes="(min-width: 1024px) 35vw, 100vw"
-                />
-                <figcaption className="text-sm leading-6 text-herb-muted">
-                  Every request is a puzzle of signs, symptoms, and meaning.
-                </figcaption>
-              </figure>
-            </AnimatedContent>
-          </div>
-        </Container>
-      </section>
-
       <section id="guidebook" className="py-16 sm:py-24 lg:py-28">
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15} className="lg:order-2">
-              <SectionEyebrow>Consult the guidebook</SectionEyebrow>
+              <SectionEyebrow>Riddled orders and the guidebook</SectionEyebrow>
               <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
-                Turn clues into knowledge
+                Decode the riddle with the Book of Herbology
               </h2>
               <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
                 <p>
-                  When a request is unclear, you turn to your guidebook. Study herbs, ingredients, remedies, and clues to
-                  understand what a customer truly needs.
+                  Villagers rarely say exactly what they need. They arrive with riddles, metaphors, symptoms, and
+                  half-told stories, and you have to understand the trouble behind their words.
                 </p>
                 <p>
-                  The guidebook helps you connect symptoms to the right treatment, transforming riddled orders into clear
-                  answers you can act on.
+                  When a request is unclear, you open the Book of Herbology. Its pages describe each herb by name and
+                  appearance, sort them into the five treatment categories (Warming, Cooling, Soothing, Cleansing, and
+                  Mending), and connect symptoms, properties, and warnings.
+                </p>
+                <p>
+                  Every remedy calls for two different herbs from the same treatment category. The guidebook is how you
+                  turn a riddled order into that exact pair.
                 </p>
               </div>
             </AnimatedContent>
             <AnimatedContent paperCrumple={0.42} paperSeed={13} distance={34} reverse duration={1} threshold={0.18} className="lg:order-1">
               <figure className="space-y-3">
                 <Image
-                  src="/images/mandragora-tacuinum.jpg"
-                  alt="A historical herbal illustration used as reference knowledge"
-                  width={1000}
-                  height={800}
+                  src="/images/guidebook.png"
+                  alt="The Book of Herbology, the in-game guidebook"
+                  width={896}
+                  height={1200}
                   className="h-auto w-full"
                   sizes="(min-width: 1024px) 45vw, 100vw"
                 />
                 <figcaption className="text-sm leading-6 text-herb-muted">
-                  Herbs and remedies become clear when you know where to look.
+                  The Book of Herbology turns a riddled order into the exact pair of herbs.
                 </figcaption>
               </figure>
             </AnimatedContent>
@@ -215,12 +182,11 @@ export default function HomePage() {
               </h2>
               <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
                 <p>
-                  Once you understand the request, it is time to act. Choose the appropriate herbs and prepare the potion
-                  that will answer your customer&apos;s need.
+                  Once you understand the request, choose the exact pair of herbs, grind them, and brew the potion that
+                  answers your customer&apos;s need.
                 </p>
                 <p>
-                  Selecting the correct ingredients matters. A thoughtful remedy brings comfort and trust, while the wrong
-                  choice can leave a problem unsolved.
+                  The right pair earns payment and trust. A wrong pair earns nothing and adds suspicion.
                 </p>
               </div>
             </AnimatedContent>
@@ -259,12 +225,12 @@ export default function HomePage() {
                     clues to the right ingredients and remedies.
                   </li>
                   <li>
-                    <span className="font-semibold text-forest">4. Select herbs.</span> Choose the ingredients that fit
-                    the treatment.
+                    <span className="font-semibold text-forest">4. Choose the exact pair.</span> Pick two different herbs
+                    from the same treatment category.
                   </li>
                   <li>
-                    <span className="font-semibold text-forest">5. Prepare the remedy.</span> Create the potion and serve
-                    your customer with care.
+                    <span className="font-semibold text-forest">5. Grind, brew, and serve.</span> Prepare the potion and
+                    serve your customer before the clock runs out.
                   </li>
                 </ol>
               </div>
@@ -275,23 +241,22 @@ export default function HomePage() {
 
       <DarkNarrativeChapter />
 
-      <section id="memory-spell" className="py-16 sm:py-24 lg:py-28">
+      <section id="match-card" className="py-16 sm:py-24 lg:py-28">
         <Container>
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <AnimatedContent distance={32} duration={0.85} threshold={0.15}>
-              <SectionEyebrow>Memory Spell Minigame</SectionEyebrow>
+              <SectionEyebrow>Match Card minigame</SectionEyebrow>
               <h2 className="mt-3 font-display text-4xl leading-[1.02] text-forest sm:text-5xl lg:text-6xl">
-                Hold on to what matters
+                Match the cards, cast the memory spell
               </h2>
               <div className="mt-6 space-y-4 text-base leading-8 text-ink/85 sm:text-lg">
                 <p>
-                  Memory Spell is a gameplay mechanic that challenges your memory and observation. Customers arrive with
-                  personalities, needs, and clues, and remembering those details can make the difference when it is time
-                  to help.
+                  When suspicion reaches three, the witch hunter comes to the shop. To survive the visit, you cast a
+                  memory spell that makes him forget what he suspects.
                 </p>
                 <p>
-                  By paying attention and recalling what you have learned, you connect observation to action. Memory
-                  Spell turns careful noticing into an important part of fulfilling each order.
+                  The spell takes the form of a timed card game. Turn over pairs of cards and match them all before the
+                  clock runs out. Matching every pair casts the spell and resets your suspicion to zero.
                 </p>
               </div>
             </AnimatedContent>
@@ -306,7 +271,7 @@ export default function HomePage() {
                   sizes="(min-width: 1024px) 40vw, 100vw"
                 />
                 <figcaption className="text-sm leading-6 text-herb-muted">
-                  Details noticed in one moment may become the key to the next remedy.
+                  Turn over the cards, match every pair, and the memory spell is cast.
                 </figcaption>
               </figure>
             </AnimatedContent>
@@ -323,8 +288,9 @@ export default function HomePage() {
                 Keep the shop running, day after day
               </h2>
               <p className="mt-5 text-base leading-8 text-ink/85 sm:text-lg">
-                Your journey in White Willow unfolds across 14 days. Each day asks you to balance the comfort of shop life
-                with the tension of a secret that must never be revealed.
+                Your journey in White Willow unfolds across 14 days. Each workday runs on a five-minute clock, and each
+                day ends with an expense you must pay. Survive all 14 days and save enough money to return home to your
+                village.
               </p>
             </FadeContent>
           </div>
@@ -333,23 +299,23 @@ export default function HomePage() {
             {[
               {
                 title: "Fulfill villagers' orders",
-                text: "Welcome each customer and prepare the remedy they need.",
+                text: "Welcome each customer and serve the remedy they need before the day's clock runs out.",
               },
               {
-                title: "Interpret challenging riddles",
+                title: "Interpret riddled orders",
                 text: "Read between symptoms, metaphors, and incomplete descriptions.",
               },
               {
-                title: "Prepare the correct remedies",
-                text: "Consult your guidebook and choose the right herbs with care.",
+                title: "Grind, brew, and serve",
+                text: "Grind the herbs, brew the potion, and serve it with care.",
               },
               {
-                title: "Remember important information",
-                text: "Use observation and memory to stay one step ahead.",
+                title: "Choose the exact pair",
+                text: "Every order asks for two different herbs from the same treatment category.",
               },
               {
-                title: "Avoid suspicion",
-                text: "Help the village without drawing the witch hunter's attention.",
+                title: "Watch your suspicion",
+                text: "A wrong pair earns nothing and adds suspicion. At three, the witch hunter visits and the Match Card minigame begins.",
               },
               {
                 title: "Keep the shop running",
