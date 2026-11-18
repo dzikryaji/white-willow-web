@@ -20,7 +20,6 @@ This project is separate from the Unity game project (`Witch Game/`). Do not pla
 - Motion for React (`motion`)
 - GSAP (used by installed React Bits components)
 - Lenis (`lenis`) for smooth scrolling
-- Lucide React
 
 ## Project structure
 
@@ -28,10 +27,7 @@ This project is separate from the Unity game project (`Witch Game/`). Do not pla
 white willow web/
   licenses/                 # Font licenses/notices and stock image attribution
   public/
-    images/
-      approved/             # Approved game-related images used by the redesign
-      stock/                # Downloaded stock/reference images with recorded sources
-    game/                   # Original approved game-related images kept intact
+    images/                 # All website images, flat (lowercase kebab-case names)
   src/
     app/
       contact/page.tsx
@@ -45,7 +41,6 @@ white willow web/
       FadeContent.tsx       # React Bits component (installed)
       Noise.tsx             # React Bits component (integrated)
       Noise.css             # React Bits component styles
-      PaperCrumple.tsx      # React Bits component (installed)
       ScrollReveal.tsx      # React Bits component (installed)
       container.tsx
       site-footer.tsx
@@ -112,22 +107,21 @@ Genuine React Bits components installed and used:
 - `@react-bits/FadeContent-TS-TW` -> `src/components/FadeContent.tsx`
 - `@react-bits/AnimatedContent-TS-TW` -> `src/components/AnimatedContent.tsx`
 - `@react-bits/Noise-JS-CSS` -> `src/components/Noise.tsx`, `src/components/Noise.css` (fixed subtle background grain overlay, typed for this project)
-- `@react-bits/PaperCrumple-TS-TW` -> `src/components/PaperCrumple.tsx`
 - `@react-bits/ScrollReveal-TS-TW` -> `src/components/ScrollReveal.tsx`
 
-Home uses React Bits entrance and scroll animations: `FadeContent` for mount/scroll fades, `AnimatedContent` for positional entrance reveals, and `ScrollReveal` for story/narrative text reveals. Selective story illustration figures combine genuine `AnimatedContent` behavior with an optional paper-crumple/unfold visual inspired by React Bits Paper Crumple; genuine `PaperCrumple` remains installed as a source component. Animations are tuned to be visible while remaining tasteful, and all motion/content visibility respects `prefers-reduced-motion` and JS-failure resilience.
+Home uses React Bits entrance and scroll animations: `FadeContent` for mount/scroll fades, `AnimatedContent` for positional entrance reveals, and `ScrollReveal` for story/narrative text reveals. Selective story illustration figures use `AnimatedContent` with a built-in paper-crumple/unfold visual. Animations are tuned to be visible while remaining tasteful, and all motion/content visibility respects `prefers-reduced-motion` and JS-failure resilience.
 
 `SpotlightCard` (previously installed) was removed during the editorial refinement because it contributed to card-like UI. The Contact page continues to use genuine React Bits animation components (`FadeContent`, `AnimatedContent`) in a non-card layout. `FadeContent`, `AnimatedContent`, and `ScrollReveal` include small local resilience adjustments for Lenis/GSAP compatibility and progressive visibility.
 
 ## Fonts and licenses
 
-- Font license texts and notices: `licenses/README.md`, `licenses/OFL-Charm.txt`, `licenses/OFL-IMFellEnglish.txt` (previous record), `licenses/OFL-SourceSerif4.txt`.
+- Font license texts and notices: `licenses/README.md`, `licenses/OFL-Charm.txt`, `licenses/OFL-SourceSerif4.txt`.
 - Apple Chancery and Hoefler Text are not used or copied into this website.
 
 ## Images and attribution
 
-- Approved existing game-related images retained intact in `public/game/` and used via copies in `public/images/approved/`: `CompanyIcon.png`, `MainMenuBackground.png`, `gameover-witch-burned.jpg`.
-- Stock/reference images and their sources/licenses are recorded in `licenses/STOCK-IMAGES.md`.
+- Game-related images live in `public/images/`: `studio-icon.png`, `main-menu-background.png`, `gameover-witch-burned.jpg`, `guidebook.png`.
+- Decorative stock/reference images and their sources/licenses are recorded in `licenses/STOCK-IMAGES.md`.
 - No unlicensed images or artwork from other games were added.
 
 ## Known limitations
