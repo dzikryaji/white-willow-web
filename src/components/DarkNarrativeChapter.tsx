@@ -3,12 +3,23 @@
 import { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useReducedMotion } from 'motion/react';
 
-// Scroll distances, in viewport heights.
+// Scroll distances, in viewport heights, measured from the top of the chapter.
 const WARNING_PIN_VH = 50; // extra scroll the warning stays pinned
-const WARNING_FADE_SCROLL_VH = 40; // warning fades out after the pin
+const WARNING_FADE_SCROLL_VH = 40; // warning fades out right after the pin
 const DARKEN_COMPLETE_SCROLL_VH = 50; // light -> dark finishes across the pin
 
-const FIRST_EMPTY_DARK_VH = 150;
+// Empty dark beat between the warning being fully gone and the game over image
+// starting to fade in. This is the real gap the visitor feels.
+const EMPTY_AFTER_WARNING_VH = 25;
+
+// Scroll position where the image track pins and its fade in begins.
+// Everything after the warning (image, secret, return to light) is derived from this.
+const IMAGE_TRACK_START_VH = WARNING_PIN_VH + WARNING_FADE_SCROLL_VH + EMPTY_AFTER_WARNING_VH;
+
+// The warning block is WARNING_PIN_VH + 100 tall, and its last part only scrolls an invisible
+// warning off screen. The image track is pulled up by the difference so that dead tail does not
+// add to the gap. The image is transparent until it pins, so the overlap is never visible.
+const IMAGE_TRACK_PULL_UP_VH = WARNING_PIN_VH + 100 - IMAGE_TRACK_START_VH;
 
 const IMAGE_REVEAL_VH = 80;
 const IMAGE_HOLD_VH = 100;
@@ -93,6 +104,9 @@ function pageColor(lightCh: Channels, darkCh: Channels, dv: number): Channels {
 
 export default function DarkNarrativeChapter() {
   const rootRef = useRef<HTMLDivElement | null>(null);
+  // A 100svh element. Its measured height is the unit for every "vh" above, so the scroll math
+  // matches the svh based layout even when window.innerHeight changes (mobile browser toolbars).
+  const unitRef = useRef<HTMLDivElement | null>(null);
   const reducedMotion = useReducedMotion();
 
   const warningOpacity = useMotionValue(1);
@@ -108,18 +122,17 @@ export default function DarkNarrativeChapter() {
 
     const update = () => {
       raf = 0;
-      const vh = window.innerHeight || 1;
+      const vh = unitRef.current?.offsetHeight || window.innerHeight || 1;
       const scrolled = -root.getBoundingClientRect().top;
 
       const warningOuterPx = (WARNING_PIN_VH / 100) * vh + vh;
       const warningHoldPx = (WARNING_PIN_VH / 100) * vh;
       const warningFadePx = (WARNING_FADE_SCROLL_VH / 100) * vh;
       const darkCompletePx = (DARKEN_COMPLETE_SCROLL_VH / 100) * vh;
-      const empty1Px = (FIRST_EMPTY_DARK_VH / 100) * vh;
       const trackPx = (IMAGE_TRACK_VH / 100) * vh;
       const returnPx = (RETURN_LIGHT_SCROLL_VH / 100) * vh;
 
-      const trackStart = warningOuterPx + empty1Px;
+      const trackStart = (IMAGE_TRACK_START_VH / 100) * vh;
       const trackEnd = trackStart + trackPx;
       const secretStart = trackEnd;
       // Light returns across the secret section. A return placed after the section would
@@ -249,10 +262,12 @@ export default function DarkNarrativeChapter() {
         </section>
       </div>
 
-      <div aria-hidden="true" style={{ height: `${FIRST_EMPTY_DARK_VH}svh` }} />
-
-      <section aria-label="Game over image" className="relative" style={{ height: `${IMAGE_TRACK_VH}svh` }}>
-        <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
+      <section
+        aria-label="Game over image"
+        className="relative"
+        style={{ height: `${IMAGE_TRACK_VH}svh`, marginTop: `${-IMAGE_TRACK_PULL_UP_VH}svh` }}
+      >
+        <div ref={unitRef} className="sticky top-0 h-[100svh] w-full overflow-hidden">
           <motion.img
             src="/images/gameover-witch-burned.jpg"
             alt="A tragic game over scene showing the consequence of being discovered as a witch"
